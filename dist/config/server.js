@@ -38,9 +38,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const dotenv = __importStar(require("dotenv"));
 dotenv.config();
 const app_1 = __importDefault(require("../app"));
+const db_1 = __importDefault(require("./db"));
 const port = process.env.PORT || 3001;
 const urlBackend = process.env.URL_BACKEND || "localHost";
-app_1.default.listen(port, () => __awaiter(void 0, void 0, void 0, function* () {
-    console.log(`Server running at ${urlBackend}:${port}`);
-}));
+(0, db_1.default)().then((event) => {
+    app_1.default.listen(port, () => __awaiter(void 0, void 0, void 0, function* () {
+        console.log(`Server   running at ${urlBackend}:${port}`);
+    }));
+}).catch((error) => {
+    console.log(error);
+});
 //# sourceMappingURL=server.js.map
