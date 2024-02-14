@@ -1,13 +1,12 @@
 import {check} from "express-validator";
 import  validationResults from '../utils/validator'
 
-class validatorUser{
-     public createUser:Array<any>
-     public singIn:Array<any>
+class validatorContacto{
+     public createContacto:Array<any>
      public update:Array<any>
 
         constructor(){
-          this.createUser=[
+          this.createContacto=[
             check('email')
         .exists()
         .trim()
@@ -15,6 +14,7 @@ class validatorUser{
         .isString(),
         check('name')
         .exists()
+        .trim()
         .notEmpty()
         .isString(),
         check('apellido')
@@ -22,49 +22,49 @@ class validatorUser{
         .trim()
         .notEmpty()
         .isString(),
-        check('password')
+        check('telefono')
         .exists()
         .trim()
         .notEmpty()
         .isString()
         .isLength({ min: 1, max: 20 }),
+        check('image')
+        .optional()
+        .trim()
+        .notEmpty()
+        .isString(),
         (req: any,res: any,next: any)=>{
         
             return validationResults(req,res,next);
             }
 
         ]  
-        this.singIn=[
-          check('email')
-          .exists()
-          .notEmpty()
-          .isString(),
-          check('password')
-          .exists()
-          .notEmpty()
-          .isString(),
-          (req: any,res: any,next: any)=>{
-          
-              return validationResults(req,res,next);
-              }
-
-            ]
         this.update=[
           check('email')
           .optional()
           .trim()
-      .notEmpty()
-      .isString(),
-      check('name')
-      .optional()
-      .trim()
-      .notEmpty()
-      .isString(),
-      check('apellido')
-      .optional()
-      .trim()
-      .notEmpty()
-      .isString(),
+            .notEmpty()
+            .isString(),
+            check('name')
+            .optional()
+            .trim()
+            .notEmpty()
+            .isString(),
+            check('apellido')
+            .optional()
+            .trim()
+            .notEmpty()
+            .isString(),
+            check('telefono')
+            .optional()
+            .trim()
+            .notEmpty()
+            .isString(),
+            check('image')
+            .optional()
+            .trim()
+            .notEmpty()
+            .isString(),
       (req: any,res: any,next: any)=>{
       
           return validationResults(req,res,next);
@@ -77,4 +77,4 @@ class validatorUser{
    
 
 
-export default validatorUser
+export default validatorContacto

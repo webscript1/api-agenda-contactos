@@ -141,7 +141,7 @@ const controller={
             const comparePassword=await compare(password,buscarUser.password)
             if(!comparePassword) return res.status(401).send({code:401,message:'contraseña invalida'})
             const token= await tokenSing(buscarUser)
-            return res.status(200).send({code:200,token:token,message:'sesion iniciada',buscarUser})
+            return res.status(200).send({code:200,token:token,message:'sesion iniciada',data:buscarUser})
            
         
             

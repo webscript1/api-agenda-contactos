@@ -26,10 +26,14 @@ const controller={
         try {
            const {user,img,name,apellido,email,telefono} =req.body
            const contacto= new Contacto(req.body)
+           const id=req.body.user._id
+           contacto.user=id
+           const limit=Number(req.params.limit) || 10
 
            const save_contacto=await contacto.save()
+           const result = await Contantos.paginate({user:id}, { page: 1, limit: limit });
 
-           return res.status(201).send({code:201,message:'contacto creado',data:save_contacto})
+           return res.status(201).send({code:201,message:'contacto creado',data:result})
             
         } catch (error) {
             console.error('error al crear contacto')
@@ -53,11 +57,14 @@ const controller={
     },
     getAll:async (req:Request,res:Response)=>{
         try {
-            const idUser=req.params.id
+            const idUser=req.body.user._id
+            const page=Number(req.params.page)
+            const limit=Number(req.params.limit)
+      
+        //    const contactos= await Contacto.find({user:idUser}).lean()
+            const result = await Contantos.paginate({user:idUser}, { page: page, limit: limit });
 
-            const contactos= await Contacto.find({user:idUser}).lean()
-
-            return res.status(200).send({code:200,count:contactos.length, message:'contactos',data:contactos})
+            return res.status(200).send({code:200,count:result.length, message:'contactos',data:result})
             
 
             
@@ -95,14 +102,18 @@ const controller={
     delete:async (req:Request,res:Response)=>{
         try {
             const idContacto=req.params.idContacto
-            const idUser=req.params.idUser
+            const idUser=req.body.user._id
 
             const deleteContacto=await Contacto.deleteOne({_id:idContacto,user:idUser})
             console.log(deleteContacto)
 
             if(deleteContacto.deletedCount===0) return res.status(404).send({code:404,message:'contacto no encontrado'})
-               
-            return res.status(200).send({code:200,message:'contacto eliminado',data:deleteContacto})
+            const totalContactos=await Contacto.countDocuments({user:idUser})
+             const data={
+                totalDocs:totalContactos,
+                deleteContacto
+             }
+            return res.status(200).send({code:200,message:'contacto eliminado',data:data})
             
         } catch (error) {
             console.error('error al crear contacto')
@@ -123,7 +134,52 @@ const controller={
             console.error('error al eliminar todos los contactos')
             return res.status(500).send({message:'error desconocido'})
         }
-    }
+    },
+    busquedas:async (req:Request,res:Response)=>{
+        try {
+            const {name}= req.params
+            const idUser=req.body.user._id
+            // Dividir el nombre completo en partes (nombre y apellido)
+           const [nombre, apellido] = name.split(' ');
+           
+
+           if(apellido){
+         
+            const get_contacto = await Contacto.find({
+                
+                $and: [
+                    {user:idUser},
+                  { name: { $regex: new RegExp(nombre, 'i') } },
+                  { apellido: { $regex: new RegExp(apellido, 'i') } }
+                ]
+              });
+
+              return res.status(200).send({code:200,mesage:'exito',data:get_contacto})
+
+
+           }else{
+            
+            const get_contacto=await Contacto.find({ 
+                user:idUser,
+                $or: [
+                 
+                { name: { $regex: new RegExp(name, 'i') } },
+                { apellido: { $regex: new RegExp(name, 'i') } },
+                { email: { $regex: new RegExp(name, 'i') } },
+                { telefono: { $regex: new RegExp(name, 'i') } }
+              ]})
+          
+            if(!get_contacto) return res.status(404).send({code:404,message:'contacto no encontrado .'})
+            
+            return res.status(200).send({code:200,mesage:'exito',data:get_contacto})
+
+           }
+          
+        } catch (error) {
+            console.error('error al buscar contacto')
+            return res.status(500).send({code:500,message:'error desconocido'})
+        }
+    },
 }
 
 export default controller

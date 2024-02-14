@@ -6,8 +6,9 @@ import helmet from 'helmet';
 import cors from 'cors'
 
 //cargar archivos rutas tesnet
-import agendaRouterTest from './rutes/agenda'
-import usuarioRouterTest from './rutes/usuario'
+import agendaRouterTest from './rutes/test/agenda'
+import usuarioRouterTest from './rutes/test/usuario'
+import imageRouterTest from './rutes/test/image'
 
 
 
@@ -24,11 +25,20 @@ app.use(helmet())
 app.use(express.urlencoded({ extended: false }));
 
 //CORS
+const corsOptions = {
+    origin: '**', // Reemplaza con el dominio de tu aplicación cliente
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true, // Habilita el intercambio de cookies entre el cliente y el servidor
+    optionsSuccessStatus: 204,
+  };
+  
+  //app.use(cors(corsOptions));
 app.use(cors())
 
 //rutas de pruebas
 app.use('/test',agendaRouterTest)
 app.use('/test-user',usuarioRouterTest)
+app.use('/test-image',imageRouterTest)
 
 
 //rutas v1
