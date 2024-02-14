@@ -4,7 +4,7 @@
   "description": "",
   "main": ".eslintrc.js",
   "scripts": {
-    "start": "node ./dist/src/config/server.js",
+    "start": "node ./dist/config/server.js",
     "dev": "ts-node-dev ./src/config/server.ts",
     "build": "tsc",
     "lint": "eslint --ignore-path .gitignore . --ext .ts",
