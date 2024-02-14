@@ -133,7 +133,7 @@ const controller = {
             if (!comparePassword)
                 return res.status(401).send({ code: 401, message: 'contraseña invalida' });
             const token = yield (0, jwt_1.tokenSing)(buscarUser);
-            return res.status(200).send({ code: 200, token: token, message: 'sesion iniciada', buscarUser });
+            return res.status(200).send({ code: 200, token: token, message: 'sesion iniciada', data: buscarUser });
         }
         catch (error) {
             console.error('error aliniciar session : ', error);

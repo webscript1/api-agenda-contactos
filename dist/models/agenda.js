@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
+const mongoose_paginate_v2_1 = __importDefault(require("mongoose-paginate-v2"));
 const Schema = mongoose_1.default.Schema;
 const contactoSchema = new Schema({
     image: String,
@@ -12,10 +13,12 @@ const contactoSchema = new Schema({
     email: String,
     telefono: String,
     user: {
-        type: Schema.Types.ObjectId, // Esto indica que el campo es de tipo ObjectId
-        ref: 'Usuario' // Referencia al modelo de Usuario (asegúrate de tener un modelo de Usuario)
+        type: Schema.Types.ObjectId,
+        ref: 'Usuario'
     }
 });
-const Contactos = mongoose_1.default.model('contacto', contactoSchema);
-exports.default = Contactos;
+contactoSchema.plugin(mongoose_paginate_v2_1.default);
+const model = mongoose_1.default.model('Contactos', contactoSchema, 'contactos');
+exports.default = model;
+//const Contactos = mongoose.model('contacto', contactoSchema);
 //# sourceMappingURL=agenda.js.map

@@ -5,9 +5,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_validator_1 = require("express-validator");
 const validator_1 = __importDefault(require("../utils/validator"));
-class validatorUser {
+class validatorContacto {
     constructor() {
-        this.createUser = [
+        this.createContacto = [
             (0, express_validator_1.check)('email')
                 .exists()
                 .trim()
@@ -15,6 +15,7 @@ class validatorUser {
                 .isString(),
             (0, express_validator_1.check)('name')
                 .exists()
+                .trim()
                 .notEmpty()
                 .isString(),
             (0, express_validator_1.check)('apellido')
@@ -22,23 +23,15 @@ class validatorUser {
                 .trim()
                 .notEmpty()
                 .isString(),
-            (0, express_validator_1.check)('password')
+            (0, express_validator_1.check)('telefono')
                 .exists()
                 .trim()
                 .notEmpty()
                 .isString()
                 .isLength({ min: 1, max: 20 }),
-            (req, res, next) => {
-                return (0, validator_1.default)(req, res, next);
-            }
-        ];
-        this.singIn = [
-            (0, express_validator_1.check)('email')
-                .exists()
-                .notEmpty()
-                .isString(),
-            (0, express_validator_1.check)('password')
-                .exists()
+            (0, express_validator_1.check)('image')
+                .optional()
+                .trim()
                 .notEmpty()
                 .isString(),
             (req, res, next) => {
@@ -61,11 +54,21 @@ class validatorUser {
                 .trim()
                 .notEmpty()
                 .isString(),
+            (0, express_validator_1.check)('telefono')
+                .optional()
+                .trim()
+                .notEmpty()
+                .isString(),
+            (0, express_validator_1.check)('image')
+                .optional()
+                .trim()
+                .notEmpty()
+                .isString(),
             (req, res, next) => {
                 return (0, validator_1.default)(req, res, next);
             }
         ];
     }
 }
-exports.default = validatorUser;
-//# sourceMappingURL=validatorUser.js.map
+exports.default = validatorContacto;
+//# sourceMappingURL=validatorContacto.js.map
